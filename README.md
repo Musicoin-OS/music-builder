@@ -9,7 +9,7 @@ By default we presume that you'll able to install all used software by yourself,
 
 ### Details
 
-- Web2Exe(https://github.com/jyapayne/Web2Executable) used to generate NW.js project, you can locate it in `/tools/Web2ExeLinux-CMD`
+- [Web2Exe](https://github.com/jyapayne/Web2Executable) used to generate NW.js project, you can locate it in `/tools/Web2ExeLinux-CMD`
 - src folder holds [MDW repository](https://github.com/Musicoin/desktop) and [music-wallet-modules](https://github.com/cryptofuture/music-wallet-modules).
 
 Reason not to use submodules is pretty easy, we just clone repositories we use locally and do updates with `git pull` - that allows not to make submodules updates in builder repository itself. 
