@@ -14,9 +14,9 @@ By default we presume that you'll able to install all used software by yourself,
 
 Reason not to use submodules is pretty easy, we just clone repositories we use locally and do updates with `git pull` - that allows not to make submodules updates in builder repository itself. 
 
-Simple extra repository solution to hold windows and macos `node_modules` prefered, since we don't do any auth on builder application itself, or share login passwords (which could always leak outside the team) to allow file uploads. Instead we just allow to publish update by the team members in the repository in the friendly for every developer manner.
+Simple extra repository solution to hold Windows and MacOS `node_modules` prefered, since we don't do any auth on builder application itself, or share login passwords (which could always leak outside the team) to allow file uploads. Instead we just allow to publish update by the team members in the repository in the friendly for every developer manner.
 
-- `tools/7z` in fact never used but containts stubs for 7-Zip to allow sfx archives generation, that could be launched under Windows. Stubs should ne located in `/usr/lib/p7zip/` or 7z will never find stub. You could find those stubs in 7-Zip for windows installation files. We use "GUI" version of stubs, instead on console version, that runs in the cmd.
+- `tools/7z` in fact never used but containts stubs for 7-Zip to allow sfx archives generation, that could be launched under Windows. Stubs should be located in `/usr/lib/p7zip/` or 7z will never find a stub. You could find those stubs in 7-Zip for windows installation files. We use "GUI" version of stubs, instead on console version, that runs in the cmd.
 
 - Symlink done from `/output/tmp/` to `/src/desktop/output` this allows to avoid bug, when Web2Exe couldn't find relative path with `--output-dir`
 
