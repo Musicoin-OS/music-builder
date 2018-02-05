@@ -3,6 +3,12 @@
 BUILDER_ROOT='/var/www/music-wallet'
 NW_VERSION='0.28.0'
 
+	# Remove previous builds
+	rm "$BUILDER_ROOT"/output/archive/final/linux-x32.tar.xz
+	rm "$BUILDER_ROOT"/output/archive/final/linux-x32.tar.xz.sha256
+	rm "$BUILDER_ROOT"/output/archive/final/linux-x64.tar.xz
+	rm "$BUILDER_ROOT"/output/archive/final/linux-x64.tar.xz.sha256
+
 	# Linux x64
 	"$BUILDER_ROOT"/tools/Web2ExeLinux-CMD/web2exe-linux "$BUILDER_ROOT"/src/desktop/ --quiet --nw-version "$NW_VERSION" --main ./interface/index.html --node-main ./hub/msc.js --app-name "Music Wallet" --uncompressed-folder --exe-icon ./favicon.png --icon ./favicon.png --export-to linux-x64
 	mv "$BUILDER_ROOT"/output/tmp/logs/last-commit.log "$BUILDER_ROOT"/output/archive/final/last-commit.log
