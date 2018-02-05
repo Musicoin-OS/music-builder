@@ -2,6 +2,7 @@
 
 BUILDER_ROOT='/var/www/music-wallet'
 NW_VERSION='0.28.0'
+
         # Remove previous builds
 	rm "$BUILDER_ROOT"/output/archive/final/windows-x32.exe
 	rm "$BUILDER_ROOT"/output/archive/final/windows-x32.exe.sha256
