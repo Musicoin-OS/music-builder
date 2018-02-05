@@ -2,7 +2,12 @@
 
 BUILDER_ROOT='/var/www/music-wallet'
 NW_VERSION='0.28.0'
-
+        # Remove previous builds
+	rm "$BUILDER_ROOT"/output/archive/final/windows-x32.exe
+	rm "$BUILDER_ROOT"/output/archive/final/windows-x32.exe.sha256
+	rm "$BUILDER_ROOT"/output/archive/final/windows-x64.exe
+	rm "$BUILDER_ROOT"/output/archive/final/windows-x64.exe.sha256
+	
 	# Windows x32
 	"$BUILDER_ROOT"/tools/Web2ExeLinux-CMD/web2exe-linux "$BUILDER_ROOT"/src/desktop/ --quiet --nw-version "$NW_VERSION" --main ./interface/index.html --node-main ./hub/msc.js --app-name "Music Wallet" --uncompressed-folder --exe-icon ./favicon.png --icon ./favicon.png --export-to windows-x32
 	cp -R  "$BUILDER_ROOT"/binary/gmc-windows/2.5.1-stable/i386/bin/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/bin/
