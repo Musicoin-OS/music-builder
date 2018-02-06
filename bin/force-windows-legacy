@@ -15,6 +15,8 @@ NW_LEGACY='0.14.7'
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/.git
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/node_modules
 	cp -R  "$BUILDER_ROOT"/src/music-wallet-modules/windows/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/node_modules/
+	rm "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/package.json
+	cp "$BUILDER_ROOT"/src/music-wallet-modules/windows/legacy/package.json "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/package.json
 	7z a -sfx7zWin32.sfx "$BUILDER_ROOT"/output/archive/final/windows-x32-legacy.exe "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"
 	sha256sum "$BUILDER_ROOT"/output/archive/final/windows-x32-legacy.exe > "$BUILDER_ROOT"/output/archive/final/windows-x32-legacy.exe.sha256
@@ -25,6 +27,8 @@ NW_LEGACY='0.14.7'
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64/package.nw/.git
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64/package.nw/node_modules
 	cp -R  "$BUILDER_ROOT"/src/music-wallet-modules/windows/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64/package.nw/node_modules/
+	rm "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64/package.nw/package.json
+	cp "$BUILDER_ROOT"/src/music-wallet-modules/windows/legacy/package.json "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64/package.nw/package.json
 	7z a -sfx7zWin32.sfx "$BUILDER_ROOT"/output/archive/final/windows-x64-legacy.exe "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"
 	sha256sum "$BUILDER_ROOT"/output/archive/final/windows-x64-legacy.exe > "$BUILDER_ROOT"/output/archive/final/windows-x64-legacy.exe.sha256
