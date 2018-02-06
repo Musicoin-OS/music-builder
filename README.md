@@ -12,6 +12,7 @@ By default we presume that you'll able to install all used software by yourself,
 - [Web2Exe](https://github.com/jyapayne/Web2Executable) used to generate NW.js project, you can locate it in `/tools/Web2ExeLinux-CMD`
 - src folder holds [MDW repository](https://github.com/Musicoin/desktop) and [music-wallet-modules](https://github.com/cryptofuture/music-wallet-modules).
 
+
 Reason not to use submodules is pretty easy, we just clone repositories we use locally and do updates with `git pull` - that allows not to make submodules updates in builder repository itself. 
 
 Simple extra repository solution to hold Windows and MacOS `node_modules` prefered, since we don't do any auth on builder application itself, or share login passwords (which could always leak outside the team) to allow file uploads. Instead we just allow to publish update by the team members in the repository in the friendly for every developer manner.
@@ -20,7 +21,7 @@ Simple extra repository solution to hold Windows and MacOS `node_modules` prefer
 
 - Symlink done from `/output/tmp/` to `/src/desktop/output` this allows to avoid bug, when Web2Exe couldn't find relative path with `--output-dir`
 
-- `last-commit.log` file includes last commit build was done from. And `build-time.log` contains build start and end time.
+- `last-commit.log` file includes last commit build was done from. `last-modules-commit.log` file includes last commit for [music-wallet-modules](https://github.com/cryptofuture/music-wallet-modules) repository. And `build-time.log` contains build start and end time.
 
 ### Running:
 
@@ -46,6 +47,8 @@ server {
 After you can proxy it on balancer with tls for example:
 
 ```
+proxy_cache_path /mnt/nginx/music levels=1:2 keys_zone=music:10m max_size=500m use_temp_path=off inactive=10m;
+
 upstream builder.musicoin.org  {
 	server  10.x.x.x:80;
 }
