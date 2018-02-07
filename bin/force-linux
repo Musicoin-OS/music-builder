@@ -14,7 +14,7 @@ NW_VERSION='0.28.0'
 	mv "$BUILDER_ROOT"/output/tmp/logs/last-commit.log "$BUILDER_ROOT"/output/archive/final/last-commit.log
 	cp -R  "$BUILDER_ROOT"/binary/gmc-linux/2.5.3-6942270/amd64/bin/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64/package.nw/bin/
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64/package.nw/.git
-	XZ_OPT=-9 tar -Jcvf "$BUILDER_ROOT"/output/archive/final/linux-x64.tar.xz "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64
+	XZ_OPT=-9 tar -Jcvf "$BUILDER_ROOT"/output/archive/final/linux-x64.tar.xz -C "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64 .
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"
 	sha256sum "$BUILDER_ROOT"/output/archive/final/linux-x64.tar.xz > "$BUILDER_ROOT"/output/archive/final/linux-x64.tar.xz.sha256
 
@@ -22,7 +22,7 @@ NW_VERSION='0.28.0'
 	"$BUILDER_ROOT"/tools/Web2ExeLinux-CMD/web2exe-linux "$BUILDER_ROOT"/src/desktop/ --quiet --nw-version "$NW_VERSION" --main ./interface/index.html --node-main ./hub/msc.js --app-name "Music Wallet" --uncompressed-folder --exe-icon ./favicon.png --icon ./favicon.png --export-to linux-x32
 	cp -R  "$BUILDER_ROOT"/binary/gmc-linux/2.5.3-6942270/i386/bin/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x32/package.nw/bin/
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x32/package.nw/.git
-	XZ_OPT=-9 tar -Jcvf "$BUILDER_ROOT"/output/archive/final/linux-x32.tar.xz "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x32
+	XZ_OPT=-9 tar -Jcvf "$BUILDER_ROOT"/output/archive/final/linux-x32.tar.xz -C "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x32 .
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"
 	sha256sum "$BUILDER_ROOT"/output/archive/final/linux-x32.tar.xz > "$BUILDER_ROOT"/output/archive/final/linux-x32.tar.xz.sha256
 
