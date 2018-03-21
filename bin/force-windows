@@ -1,28 +1,20 @@
 #! /bin/bash
 
 BUILDER_ROOT='/var/www/music-wallet'
-NW_VERSION='0.28.1'
+NW_VERSION='0.29.1'
 
-        # Remove previous builds
+	# Remove previous builds
 	rm "$BUILDER_ROOT"/output/archive/final/windows-x32.exe
 	rm "$BUILDER_ROOT"/output/archive/final/windows-x32.exe.sha256
 	rm "$BUILDER_ROOT"/output/archive/final/windows-x64.exe
 	rm "$BUILDER_ROOT"/output/archive/final/windows-x64.exe.sha256
-	
-	# Windows x32
-	"$BUILDER_ROOT"/tools/Web2ExeLinux-CMD/web2exe-linux "$BUILDER_ROOT"/src/desktop/ --quiet --nw-version "$NW_VERSION" --main ./interface/index.html --node-main ./hub/msc.js --app-name "Music Wallet" --uncompressed-folder --exe-icon ./favicon.png --icon ./favicon.png --export-to windows-x32
-	cp -R  "$BUILDER_ROOT"/binary/gmc-windows/2.5.1-stable/i386/bin/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/bin/
-	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/.git
-	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/node_modules
-	cp -R  "$BUILDER_ROOT"/src/music-wallet-modules/windows/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/node_modules/
-	7z a -sfx7zWin32.sfx "$BUILDER_ROOT"/output/archive/final/windows-x32.exe "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32
-	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"
-	sha256sum "$BUILDER_ROOT"/output/archive/final/windows-x32.exe > "$BUILDER_ROOT"/output/archive/final/windows-x32.exe.sha256
 
 	# Windows x64
 	"$BUILDER_ROOT"/tools/Web2ExeLinux-CMD/web2exe-linux "$BUILDER_ROOT"/src/desktop/ --quiet --nw-version "$NW_VERSION" --main ./interface/index.html --node-main ./hub/msc.js --app-name "Music Wallet" --uncompressed-folder --exe-icon ./favicon.png --icon ./favicon.png --export-to windows-x64
-	cp -R  "$BUILDER_ROOT"/binary/gmc-windows/2.5.1-stable/amd64/bin/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64/package.nw/bin/
+	cp -R  "$BUILDER_ROOT"/binary/gmc-windows/2.6.2/amd64/bin/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64/package.nw/bin/
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64/package.nw/.git
+	rm "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64/package.nw/bootnodes.json
+	cp "$BUILDER_ROOT"/output/tmp/bootnodes.json "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64/package.nw/bootnodes.json
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64/package.nw/node_modules
 	cp -R  "$BUILDER_ROOT"/src/music-wallet-modules/windows/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64/package.nw/node_modules/
 	7z a -sfx7zWin32.sfx "$BUILDER_ROOT"/output/archive/final/windows-x64.exe "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x64
