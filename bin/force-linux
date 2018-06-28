@@ -1,7 +1,7 @@
 #! /bin/bash
 
-BUILDER_ROOT='/var/www/music-wallet'
-NW_VERSION='0.29.1'
+BUILDER_ROOT='/var/www/music-builder'
+NW_VERSION='0.31.4'
 
 	# Remove previous builds
 	rm "$BUILDER_ROOT"/output/archive/final/linux-x32.tar.xz
@@ -16,7 +16,7 @@ NW_VERSION='0.29.1'
 	rm "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64/package.nw/bootnodes.json
 	cp "$BUILDER_ROOT"/output/tmp/bootnodes.json "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64/package.nw/bootnodes.json
 	rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64/package.nw/node_modules
-	cp -R  "$BUILDER_ROOT"/src/desktop/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64/package.nw/node_modules/
+	cp -R  "$BUILDER_ROOT"/output/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64/package.nw/node_modules/
 	pushd "$BUILDER_ROOT"/output/tmp/"Music Wallet"/
 	XZ_OPT=-9 tar -Jcvf "$BUILDER_ROOT"/output/archive/final/linux-x64.tar.xz ./linux-x64
 	popd
