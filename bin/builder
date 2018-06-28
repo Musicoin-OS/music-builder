@@ -1,17 +1,18 @@
 #! /bin/bash
 
-BUILDER_ROOT='/var/www/music-wallet'
+BUILDER_ROOT='/var/www/music-builder'
 LASTCOMMIT=$(cd "$BUILDER_ROOT"/src/desktop/ && git log | head -1)
 PREVCOMMIT=$(cat "$BUILDER_ROOT"/output/archive/final/last-commit.log)
 LASTMODULESCOMMIT=$(cd "$BUILDER_ROOT"/src/music-wallet-modules/ && git log | head -1)
 PREVMODULESCOMMIT=$(cat "$BUILDER_ROOT"/output/archive/final/last-modules-commit.log)
-NW_VERSION='0.29.1'
+NW_VERSION='0.31.4'
 NW_VERSION_MACOS='0.21.6'
 NW_LEGACY='0.14.7'
 
-cd "$BUILDER_ROOT"/src/desktop/ && rm package-lock.json
+#cd "$BUILDER_ROOT"/src/desktop/ && rm package-lock.json
 git pull
 cd "$BUILDER_ROOT"/src/music-wallet-modules/ && git pull
+rm -rf "$BUILDER_ROOT"/output/node_modules/
 
 if [ "$LASTCOMMIT" == "$PREVCOMMIT" ] && [ "$LASTMODULESCOMMIT" == "$PREVMODULESCOMMIT" ]
 then
@@ -23,7 +24,8 @@ else
     echo "Build Start Time:" "$(date)" > "$BUILDER_ROOT"/output/archive/final/build-time.log
     cd "$BUILDER_ROOT"/src/desktop/
     git log | head -1 > "$BUILDER_ROOT"/output/tmp/logs/last-commit.log
-    npm install
+    yarn
+    mv "$BUILDER_ROOT"/src/desktop/node_modules/ "$BUILDER_ROOT"/output/node_modules/
     cd "$BUILDER_ROOT"/src/music-wallet-modules/
     git log | head -1 > "$BUILDER_ROOT"/output/tmp/logs/last-modules-commit.log
     pushd "$BUILDER_ROOT"/output/tmp/
@@ -40,7 +42,7 @@ else
     rm "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64/package.nw/bootnodes.json
     cp "$BUILDER_ROOT"/output/tmp/bootnodes.json "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64/package.nw/bootnodes.json
     rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64/package.nw/node_modules
-    cp -R  "$BUILDER_ROOT"/src/desktop/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64/package.nw/node_modules/
+    cp -R  "$BUILDER_ROOT"/output/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x64/package.nw/node_modules/
     pushd "$BUILDER_ROOT"/output/tmp/"Music Wallet"/
     XZ_OPT=-9 tar -Jcvf "$BUILDER_ROOT"/output/archive/final/linux-x64.tar.xz ./linux-x64
     popd
@@ -54,7 +56,7 @@ else
     rm "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x32/package.nw/bootnodes.json
     cp "$BUILDER_ROOT"/output/tmp/bootnodes.json "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x32/package.nw/bootnodes.json
     rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x32/package.nw/node_modules
-    cp -R  "$BUILDER_ROOT"/src/desktop/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x32/package.nw/node_modules/
+    cp -R  "$BUILDER_ROOT"/output/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/linux-x32/package.nw/node_modules/
     pushd "$BUILDER_ROOT"/output/tmp/"Music Wallet"/
     XZ_OPT=-9 tar -Jcvf "$BUILDER_ROOT"/output/archive/final/linux-x32.tar.xz ./linux-x32
     popd
@@ -62,14 +64,16 @@ else
     sha256sum "$BUILDER_ROOT"/output/archive/final/linux-x32.tar.xz > "$BUILDER_ROOT"/output/archive/final/linux-x32.tar.xz.sha256
 
     # Windows x32
-    #"$BUILDER_ROOT"/tools/Web2ExeLinux-CMD/web2exe-linux "$BUILDER_ROOT"/src/desktop/ --quiet --nw-version "$NW_VERSION" --main ./interface/index.html --node-main ./hub/msc.js --app-name "Music Wallet" --uncompressed-folder --exe-icon ./favicon.png --icon ./favicon.png --export-to windows-x32
-    #cp -R  "$BUILDER_ROOT"/binary/gmc-windows/2.5.1-stable/i386/bin/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/bin/
-    #rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/.git
-    #rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/node_modules
-    #cp -R  "$BUILDER_ROOT"/src/music-wallet-modules/windows/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/node_modules/
-    #7z a -sfx7zWin32.sfx "$BUILDER_ROOT"/output/archive/final/windows-x32.exe "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32
-    #rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"
-    #sha256sum "$BUILDER_ROOT"/output/archive/final/windows-x32.exe > "$BUILDER_ROOT"/output/archive/final/windows-x32.exe.sha256
+    "$BUILDER_ROOT"/tools/Web2ExeLinux-CMD/web2exe-linux "$BUILDER_ROOT"/src/desktop/ --quiet --nw-version "$NW_VERSION" --main ./interface/index.html --node-main ./hub/msc.js --app-name "Music Wallet" --uncompressed-folder --exe-icon ./favicon.png --icon ./favicon.png --export-to windows-x32
+    cp -R  "$BUILDER_ROOT"/binary/gmc-windows/2.6.2/i386/bin/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/bin/
+    rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/.git
+    rm "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/bootnodes.json
+    cp "$BUILDER_ROOT"/output/tmp/bootnodes.json "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/bootnodes.json
+    rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/node_modules
+    cp -R  "$BUILDER_ROOT"/src/music-wallet-modules/windows/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/node_modules/
+    7z a -sfx7zWin32.sfx "$BUILDER_ROOT"/output/archive/final/windows-x32.exe "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32
+    rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"
+    sha256sum "$BUILDER_ROOT"/output/archive/final/windows-x32.exe > "$BUILDER_ROOT"/output/archive/final/windows-x32.exe.sha256
 
     # Windows x64
     "$BUILDER_ROOT"/tools/Web2ExeLinux-CMD/web2exe-linux "$BUILDER_ROOT"/src/desktop/ --quiet --nw-version "$NW_VERSION" --main ./interface/index.html --node-main ./hub/msc.js --app-name "Music Wallet" --uncompressed-folder --exe-icon ./favicon.png --icon ./favicon.png --export-to windows-x64
@@ -84,16 +88,18 @@ else
     sha256sum "$BUILDER_ROOT"/output/archive/final/windows-x64.exe > "$BUILDER_ROOT"/output/archive/final/windows-x64.exe.sha256
 
     # Windows x32 Legacy (XP and probably older)
-    #"$BUILDER_ROOT"/tools/Web2ExeLinux-CMD/web2exe-linux "$BUILDER_ROOT"/src/desktop/ --quiet --nw-version "$NW_LEGACY" --main ./interface/index.html --node-main ./hub/msc.js --app-name "Music Wallet" --uncompressed-folder --exe-icon ./favicon.png --icon ./favicon.png --export-to windows-x32
-    #cp -R  "$BUILDER_ROOT"/binary/gmc-windows/2.5.1-stable/i386/bin/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/bin/
-    #rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/.git
-    #rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/node_modules
-    #cp -R  "$BUILDER_ROOT"/src/music-wallet-modules/windows/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/node_modules/
-    #rm "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/package.json
-    #cp "$BUILDER_ROOT"/src/music-wallet-modules/windows/legacy/package.json "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/package.json
-    #7z a -sfx7zWin32.sfx "$BUILDER_ROOT"/output/archive/final/windows-x32-legacy.exe "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32
-    #rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"
-    #sha256sum "$BUILDER_ROOT"/output/archive/final/windows-x32-legacy.exe > "$BUILDER_ROOT"/output/archive/final/windows-x32-legacy.exe.sha256
+    "$BUILDER_ROOT"/tools/Web2ExeLinux-CMD/web2exe-linux "$BUILDER_ROOT"/src/desktop/ --quiet --nw-version "$NW_LEGACY" --main ./interface/index.html --node-main ./hub/msc.js --app-name "Music Wallet" --uncompressed-folder --exe-icon ./favicon.png --icon ./favicon.png --export-to windows-x32
+    cp -R  "$BUILDER_ROOT"/binary/gmc-windows/2.6.2/i386/bin/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/bin/
+    rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/.git
+    rm "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/bootnodes.json
+    cp "$BUILDER_ROOT"/output/tmp/bootnodes.json "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/bootnodes.json
+    rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/node_modules
+    cp -R  "$BUILDER_ROOT"/src/music-wallet-modules/windows/node_modules/ "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/node_modules/
+    rm "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/package.json
+    cp "$BUILDER_ROOT"/src/music-wallet-modules/windows/legacy/package.json "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32/package.nw/package.json
+    7z a -sfx7zWin32.sfx "$BUILDER_ROOT"/output/archive/final/windows-x32-legacy.exe "$BUILDER_ROOT"/output/tmp/"Music Wallet"/windows-x32
+    rm -rf "$BUILDER_ROOT"/output/tmp/"Music Wallet"
+    sha256sum "$BUILDER_ROOT"/output/archive/final/windows-x32-legacy.exe > "$BUILDER_ROOT"/output/archive/final/windows-x32-legacy.exe.sha256
 
     # Windows x64 Legacy (XP 64 bit)
     "$BUILDER_ROOT"/tools/Web2ExeLinux-CMD/web2exe-linux "$BUILDER_ROOT"/src/desktop/ --quiet --nw-version "$NW_LEGACY" --main ./interface/index.html --node-main ./hub/msc.js --app-name "Music Wallet" --uncompressed-folder --exe-icon ./favicon.png --icon ./favicon.png --export-to windows-x64
